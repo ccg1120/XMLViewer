@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XMLViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="XmlViewer" Height="450" Width="800">
     <Grid>
+        <Grid Name ="TreeGrid" Margin="33,38,448,20" />
 
+        <Grid Name ="SubTreeGrid"/>
+        <Grid Name ="InspacterGrid"/>
     </Grid>
 </Window>
