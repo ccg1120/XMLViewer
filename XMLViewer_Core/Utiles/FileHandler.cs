@@ -6,38 +6,44 @@ using System.Threading.Tasks;
 
 namespace XMLViewer_Core.Utiles
 {
-    enum XMLFileLoadReturnValue
+    public enum FileLoadReturnValue
     {
         Success,
         ExistsFile,
-        NoXMLExtention,
+        NotSupportExtention,
         NullFilePath
     }
 
     /// <summary>
     /// 파일을 읽어서 값을 전달 하는 역할
     /// </summary>
-    internal class FileHandler
+    public class FileHandler
     {
-        static XMLFileLoadReturnValue LoadXMLFile(ref string filePath, ref string readOutput)
+        private static readonly string _extension = ".xml";
+
+        public static FileLoadReturnValue LoadXMLFile(string filePath, string readOutput)
         {
-            if ( string.IsNullOrEmpty(filePath))
+            return LoadFile(filePath, _extension, readOutput);
+        }
+
+        private static FileLoadReturnValue LoadFile(string filePath, string extension, string readOutput)
+        {
+            if (string.IsNullOrEmpty(filePath))
             {
-                return XMLFileLoadReturnValue.NullFilePath;
+                return FileLoadReturnValue.NullFilePath;
             }
 
             FileInfo fileInfo = new FileInfo(filePath);
-            if(fileInfo.Exists == false)
+            if (fileInfo.Exists == false)
             {
-                return XMLFileLoadReturnValue.ExistsFile;
+                return FileLoadReturnValue.ExistsFile;
             }
-            if (fileInfo.Extension.Normalize().Equals(".xml") == false)
+            if (fileInfo.Extension.Normalize().Equals(extension) == false)
             {
-                return XMLFileLoadReturnValue.NoXMLExtention;
+                return FileLoadReturnValue.NotSupportExtention;
             }
-
             readOutput = File.ReadAllText(filePath, Encoding.UTF8);
-            return XMLFileLoadReturnValue.Success;
+            return FileLoadReturnValue.Success;
         }
     }
 }

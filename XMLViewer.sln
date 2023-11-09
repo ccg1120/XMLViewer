@@ -5,7 +5,12 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XMLViewer", "XMLViewer\XMLViewer.csproj", "{303C4AD5-E0C0-42F6-BA25-BCDA8DE66AFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLViewer_Core", "XMLViewer_Core\XMLViewer_Core.csproj", "{78CE6AAC-DC21-4B6D-B9A1-3B84A9533188}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XMLViewer_Core", "XMLViewer_Core\XMLViewer_Core.csproj", "{78CE6AAC-DC21-4B6D-B9A1-3B84A9533188}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunctionTest", "FunctionTest\FunctionTest.csproj", "{FF935C46-3BBC-4504-83EA-36FE28CD7313}"
+	ProjectSection(ProjectDependencies) = postProject
+		{78CE6AAC-DC21-4B6D-B9A1-3B84A9533188} = {78CE6AAC-DC21-4B6D-B9A1-3B84A9533188}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,10 @@ Global
 		{78CE6AAC-DC21-4B6D-B9A1-3B84A9533188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78CE6AAC-DC21-4B6D-B9A1-3B84A9533188}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78CE6AAC-DC21-4B6D-B9A1-3B84A9533188}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF935C46-3BBC-4504-83EA-36FE28CD7313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF935C46-3BBC-4504-83EA-36FE28CD7313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF935C46-3BBC-4504-83EA-36FE28CD7313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF935C46-3BBC-4504-83EA-36FE28CD7313}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
