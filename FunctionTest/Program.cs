@@ -1,16 +1,14 @@
-﻿using XMLViewer_Core.Utiles;
+﻿using FunctionTest;
+using XMLViewer_Core.Utiles;
 
-
-class FunctionTest
+class Program
 {
     static void Main(string[] args)
     {
-        // Display the number of command line arguments.
+        
+        Console.WriteLine("TestDataExport Start");
 
-        FileHandler fileHandler;
-
-
-        Console.WriteLine("test");
-        Console.WriteLine(args.Length);
+        TestDataExporter. CreateTextXMLData("D:\\Project\\My", "D:\\Project\\Test.xml");
+        Console.WriteLine("TestDataExport End");
     }
 }
