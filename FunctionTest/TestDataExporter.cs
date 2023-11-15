@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace FunctionTest
 {
@@ -29,6 +30,9 @@ namespace FunctionTest
             foreach (DirectoryInfo directoryInfo in directoryInfos)
             {
                 string name = directoryInfo.Name;
+                if (isValidStringToXMLName(name) == false)
+                    continue;
+
                 string createTime = directoryInfo.CreationTime.ToString();
                 string path = directoryInfo.FullName;
                 string fileCount = directoryInfo.GetFiles().Count().ToString();
@@ -47,6 +51,9 @@ namespace FunctionTest
                     continue;
 
                 string name = fileInfo.Name;
+                if (isValidStringToXMLName(name) == false)
+                    continue;
+
                 string createTime = fileInfo.CreationTime.ToString();
                 string path = fileInfo.FullName;
 
@@ -55,6 +62,15 @@ namespace FunctionTest
                 fileElement.SetAttribute(nameof(path), path);
                 parentXmlElement.AppendChild(fileElement);
             }
+        }
+        private static bool isValidStringToXMLName(string str)
+        {
+            //https://www.w3schools.com/xml/xml_elements.asp
+            // +,* 등은 element 이름으로 쓰일 수 없음 그래서 포함되는 경우 제외 시킴
+            if (str.Contains("*") || str.Contains("=") || str.Contains("+") || str.Contains("&"))
+                return false;
+
+            return true;
         }
     }
 }
