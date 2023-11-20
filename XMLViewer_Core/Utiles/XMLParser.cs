@@ -7,9 +7,22 @@ using System.Xml;
 
 namespace XMLViewer_Core.Utiles
 {
-    internal class XMLParser
+    public class XMLParser
     {
+        public static void LoadXML(string filePath)
+        {
+            FileLoadReturnValue fileLoadReturnValue = FileHandler.isValidFilePathAndXMLExtension(filePath);
+            if (fileLoadReturnValue != FileLoadReturnValue.Success)
+            {
+                //로거 하나 만들어야 할듯?
+                return;
+            }
 
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(filePath);
+
+
+        }
         async Task TestReader(System.IO.Stream stream)
         {
             XmlReaderSettings settings = new XmlReaderSettings();

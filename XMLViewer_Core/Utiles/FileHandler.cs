@@ -26,7 +26,12 @@ namespace XMLViewer_Core.Utiles
             return LoadFile(filePath, _extension, readOutput);
         }
 
-        private static FileLoadReturnValue LoadFile(string filePath, string extension, string readOutput)
+        public static FileLoadReturnValue isValidFilePathAndXMLExtension(string filePath)
+        {
+            return isValidFilePathAndExtension(filePath, _extension);
+        }
+
+        public static FileLoadReturnValue isValidFilePathAndExtension(string filePath, string extension)
         {
             if (string.IsNullOrEmpty(filePath))
             {
@@ -42,8 +47,16 @@ namespace XMLViewer_Core.Utiles
             {
                 return FileLoadReturnValue.NotSupportExtention;
             }
-            readOutput = File.ReadAllText(filePath, Encoding.UTF8);
             return FileLoadReturnValue.Success;
         }
+
+        private static FileLoadReturnValue LoadFile(string filePath, string extension, string readOutput)
+        {
+            FileLoadReturnValue rv = isValidFilePathAndExtension(filePath, extension);
+            readOutput = File.ReadAllText(filePath, Encoding.UTF8);
+            return rv;
+        }
+
+        
     }
 }
