@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace XMLViewer_Core.Utiles
 {
@@ -19,8 +20,13 @@ namespace XMLViewer_Core.Utiles
             }
 
             XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(filePath);
-
+            xmlDocument.Load(filePath);
+            //파일을 읽었는데 노드가 없다? 확인 필요함
+            //XmlNodeList xmlNodeList = xmlDocument.ChildNodes;
+            //foreach (XmlNode xmlNode in xmlNodeList)
+            //{
+               
+            //}
 
         }
         async Task TestReader(System.IO.Stream stream)
