@@ -15,6 +15,7 @@ class Program
         FileInfo testDataFile = new FileInfo(TestDataParameter.TestXMLDataFilePath);
         if(testDataFile.Exists == false)
             TestDataExporter.CreateTextXMLData("D:\\Project\\My", TestDataParameter.TestXMLDataFilePath);
+        Logger.Log_Dev("TESTDEV");
         Logger.Log(LogLevel.Info, "test");
         Console.WriteLine("TestDataExport End");
         XMLParser.LoadXML(TestDataParameter.TestXMLDataFilePath);

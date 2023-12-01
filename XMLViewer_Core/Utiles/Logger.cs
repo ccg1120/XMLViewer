@@ -11,7 +11,6 @@ namespace XMLViewer_Core.Utiles
 {
     public enum LogLevel
     {
-        Dev,
         Info,
         Warn,
         Error
@@ -19,13 +18,26 @@ namespace XMLViewer_Core.Utiles
 
     public class Logger : IDisposable
     {
+        static Logger()
+        {
+
+        }
+        public static void Log_Dev(string msg)
+        {
+            if (_instance._isInitailizeLogger == false)
+                _instance.initalizeLogger();
+
+            if (_instance._isDebuggerAttached == false)
+                return;
+
+            string logString = $"Log [DEV]:: {msg}";
+            Console.WriteLine(logString);
+            _instance._streamWriter.WriteLine(logString);
+        }
         public static void Log(LogLevel logLevel, string msg)
         {
             if( _instance._isInitailizeLogger == false)
                 _instance.initalizeLogger();
-
-            if ( (logLevel == LogLevel.Dev) && (_instance._isDebuggerAttached == false) )
-                return;
 
             string logString = $"LogLevel[{logLevel.ToString()}]:: {msg}";
             Console.WriteLine(logString);
@@ -42,7 +54,9 @@ namespace XMLViewer_Core.Utiles
         {
             _streamWriter = StreamWriter.Null;
             _isDebuggerAttached = Debugger.IsAttached;
+            AppDomain.CurrentDomain.ProcessExit += CloseLogger!;
         }
+
         private void initalizeLogger()
         {
             string logFileSavePath = getLogFilePath();
@@ -62,12 +76,17 @@ namespace XMLViewer_Core.Utiles
             }
             _isInitailizeLogger = true;
         }
+        private void CloseLogger(object sender, EventArgs e)
+        {
+
+        }
         private string getLogFilePath()
         {
             DateTime currentDateTime = DateTime.Now;
             string timeFormat = "yyyyMMdd_HHmmss";
             string time = currentDateTime.ToString(timeFormat);
-            return Path.Combine(Directory.GetCurrentDirectory(), "XMLVi`ewer_", time, ".log");
+            string fileName = $"XMLViewer_{ time }.log";
+            return Path.Combine(Directory.GetCurrentDirectory(), fileName );
         }
 
         private static Logger       _instance = new Logger();
