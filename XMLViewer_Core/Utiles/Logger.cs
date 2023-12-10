@@ -38,6 +38,7 @@ namespace XMLViewer_Core.Utiles
             string logString = $"LogLevel[{logLevel.ToString()}]:: {msg}";
             Console.WriteLine(logString);
             _instance._streamWriter.WriteLine(logString);
+
         }
         public void Dispose()
         {
@@ -52,7 +53,7 @@ namespace XMLViewer_Core.Utiles
         }
         private void initalizeLogger()
         {
-            string logFileSavePath = getLogFilePath();
+            string logFileSavePath = getLogFileFullPath();
             if (File.Exists(logFileSavePath) == false)
             {
                 try
@@ -69,26 +70,41 @@ namespace XMLViewer_Core.Utiles
             }
             _isInitailizeLogger = true;
         }
-        private void CloseLogger(object sender, EventArgs e)
+        public static void CloseLogger(object sender, EventArgs e)
         {
-            if(_isInitailizeLogger)
+            if (_instance._isInitailizeLogger)
             {
-                if (_streamWriter.Equals(StreamWriter.Null) == false)
-                    _streamWriter.Dispose();
+                if (_instance._streamWriter.Equals(StreamWriter.Null) == false)
+                {
+                    _instance._streamWriter.WriteLine("CloseLogger");
+                    _instance._streamWriter.Close();
+                }
             }
         }
-        private string getLogFilePath()
+        private string getLogFolderPath()
+        {
+            string logFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "log");
+
+            if (Directory.Exists(logFolderPath) == false)
+                Directory.CreateDirectory(logFolderPath);
+
+            return logFolderPath;
+        }
+        private string getLogFileFullPath()
         {
             DateTime currentDateTime = DateTime.Now;
             string timeFormat = "yyyyMMdd_HHmmss";
             string time = currentDateTime.ToString(timeFormat);
-            string fileName = $"XMLViewer_{ time }.log";
-            return Path.Combine(Directory.GetCurrentDirectory(), fileName );
+            string fileName = $"XMLViewer_{time}.log";
+
+            string logFolderPath = getLogFolderPath();
+
+            return Path.Combine(logFolderPath, fileName);
         }
 
-        private static Logger       _instance;
-        private bool                _isInitailizeLogger;
-        private StreamWriter        _streamWriter;
-        private readonly bool       _isDebuggerAttached;
+        private static Logger _instance;
+        private bool _isInitailizeLogger;
+        private StreamWriter _streamWriter;
+        private readonly bool _isDebuggerAttached;
     }
 }

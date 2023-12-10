@@ -22,11 +22,15 @@ namespace XMLViewer_Core.Utiles
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.Load(filePath);
             //파일을 읽었는데 노드가 없다? 확인 필요함
-            //XmlNodeList xmlNodeList = xmlDocument.ChildNodes;
-            //foreach (XmlNode xmlNode in xmlNodeList)
-            //{
-               
-            //}
+            XmlNodeList xmlNodeList = xmlDocument.ChildNodes;
+            foreach (XmlNode xmlNode in xmlNodeList)
+            {
+                Console.WriteLine(xmlNode.Name);
+                foreach (XmlNode ChildNode in xmlNode.ChildNodes)
+                {
+                    Console.WriteLine(ChildNode.Name);
+                }
+            }
 
         }
         async Task TestReader(System.IO.Stream stream)
