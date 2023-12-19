@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace XMLViewer_Core.Utiles
@@ -16,7 +17,7 @@ namespace XMLViewer_Core.Utiles
         Error
     }
 
-    public class Logger : IDisposable
+    public class Logger
     {
         static Logger()
         {
@@ -30,56 +31,37 @@ namespace XMLViewer_Core.Utiles
                 return;
 
             string logString = $"Log [DEV]:: {msg}";
+            _instance._logQueue.Enqueue(logString);
             Console.WriteLine(logString);
-            _instance._streamWriter.WriteLine(logString);
         }
         public static void Log(LogLevel logLevel, string msg)
         {
             string logString = $"LogLevel[{logLevel.ToString()}]:: {msg}";
+            _instance._logQueue.Enqueue(logString);
             Console.WriteLine(logString);
-            _instance._streamWriter.WriteLine(logString);
-
         }
-        public void Dispose()
-        {
-            if (_streamWriter.Equals(StreamWriter.Null) == false)
-                _streamWriter.Dispose();
-        }
+        public string LogFilePath { get; private set; }
+       
         private Logger()
         {
-            _streamWriter = StreamWriter.Null;
             _isDebuggerAttached = Debugger.IsAttached;
-            AppDomain.CurrentDomain.ProcessExit += CloseLogger!;
+            LogFilePath = string.Empty;
+            _isInitailizeLogger = false;
+            _logQueue = new Queue<string>();
+            _lock = new object();
         }
         private void initalizeLogger()
         {
             string logFileSavePath = getLogFileFullPath();
             if (File.Exists(logFileSavePath) == false)
             {
-                try
+                using(TextWriter writer = File.CreateText(logFileSavePath))
                 {
-                    _streamWriter = File.CreateText(logFileSavePath);
-                    _streamWriter.WriteLine("initalizeLogger");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                    if (_streamWriter.Equals(StreamWriter.Null) == false)
-                        _streamWriter.Dispose();
+                    writer.WriteLine("Logger Open");
                 }
             }
+            LogFilePath = logFileSavePath;
             _isInitailizeLogger = true;
-        }
-        public static void CloseLogger(object sender, EventArgs e)
-        {
-            if (_instance._isInitailizeLogger)
-            {
-                if (_instance._streamWriter.Equals(StreamWriter.Null) == false)
-                {
-                    _instance._streamWriter.WriteLine("CloseLogger");
-                    _instance._streamWriter.Close();
-                }
-            }
         }
         private string getLogFolderPath()
         {
@@ -102,9 +84,11 @@ namespace XMLViewer_Core.Utiles
             return Path.Combine(logFolderPath, fileName);
         }
 
-        private static Logger _instance;
-        private bool _isInitailizeLogger;
-        private StreamWriter _streamWriter;
-        private readonly bool _isDebuggerAttached;
+        private static Logger        _instance;
+
+        private bool                _isInitailizeLogger;
+        private readonly bool       _isDebuggerAttached;
+        private Queue<string>       _logQueue;
+        private object              _lock;
     }
 }
